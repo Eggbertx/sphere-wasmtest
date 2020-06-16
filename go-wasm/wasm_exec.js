@@ -2,6 +2,10 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// modifications made for compatibility with miniSphere by Eggbertx
+import { DataWriter } from "./wasm-util";
+const writer = new DataWriter();
+
 (() => {
 	// Map multiple JavaScript environments to a single common API,
 	// preferring web standards over Node.js API.
@@ -11,7 +15,9 @@
 	// - Node.js
 	// - Electron
 	// - Parcel
-
+	if(!global.module) {
+		global.module = {}
+	}
 	if (typeof global !== "undefined") {
 		// global already exists
 	} else if (typeof window !== "undefined") {
@@ -41,13 +47,14 @@
 		global.fs = {
 			constants: { O_WRONLY: -1, O_RDWR: -1, O_CREAT: -1, O_TRUNC: -1, O_APPEND: -1, O_EXCL: -1 }, // unused
 			writeSync(fd, buf) {
-				outputBuf += decoder.decode(buf);
+				return writer.writeBytes(buf);
+				/* outputBuf += decoder.decode(buf);
 				const nl = outputBuf.lastIndexOf("\n");
 				if (nl != -1) {
 					console.log(outputBuf.substr(0, nl));
 					outputBuf = outputBuf.substr(nl + 1);
 				}
-				return buf.length;
+				return buf.length; */
 			},
 			write(fd, buf, offset, length, position, callback) {
 				if (offset !== 0 || length !== buf.length || position !== null) {
@@ -90,6 +97,13 @@
 			geteuid() { return -1; },
 			getegid() { return -1; },
 			getgroups() { throw enosys(); },
+			hrtime(time) {
+				let d = new Date();
+				let seconds = d.getSeconds();
+				let nano = seconds * 1000000;
+				if(time == undefined) return [ nano,seconds ]
+				return [ nano - time[0], seconds - time[1] ];
+			},
 			pid: -1,
 			ppid: -1,
 			umask() { throw enosys(); },
@@ -99,12 +113,22 @@
 	}
 
 	if (!global.crypto) {
-		const nodeCrypto = require("crypto");
-		global.crypto = {
-			getRandomValues(b) {
-				nodeCrypto.randomFillSync(b);
-			},
-		};
+		if(Sphere) {
+			global.crypto = {
+				getRandomValues(arr) {
+					for(const i in arr) {
+						arr[i] = Math.floor(Math.random() * 256);
+					}
+				}
+			}
+		} else {
+			const nodeCrypto = require("crypto");
+			global.crypto = {
+				getRandomValues(b) {
+					nodeCrypto.randomFillSync(b);
+				},
+			};
+		}
 	}
 
 	if (!global.performance) {

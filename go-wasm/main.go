@@ -1,7 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"syscall/js"
+)
 
 func main() {
-	fmt.Println("Hello, miniSphere!")
+	sphereNS := js.Global().Get("Sphere")
+	version := sphereNS.Get("Engine").String()
+	fmt.Println("Hello from Go/WebAssembly!")
+	fmt.Printf("According to WebAssembly, it looks like you're using %s\n", version)
 }

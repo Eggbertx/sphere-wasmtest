@@ -1,25 +1,22 @@
 import { Thread } from 'sphere-runtime';
-
-let importObject = {
-	imports: {
-		go: arg => {
-			SSj.log(arg);
-		}
-	}
-}
-
+// import { GoWasm } from '@/go-wasm/go-wasm'
+import "@/go-wasm/wasm_exec"
 
 export default
 class WebAssemblyTest extends Thread {
 	constructor() {
 		super();
 		let wasmFile = new FileStream("@/go-wasm/go-wasm.wasm", FileOp.Read);
-		let fileArr = wasmFile.read(wasmFile.fileSize);
-
-		WebAssembly.instantiate(fileArr, importObject).then(results => {
-			Sphere.abort(results.instance);
+		this.fileArr = wasmFile.read(wasmFile.fileSize);
+		this.go = new Go();
+	}
+	async start() {
+		return super.start().then(() => {
+			WebAssembly.instantiate(this.fileArr, this.go.importObject).then(results => {
+				this.go.run(results.instance);
+				// this.wasmRunner.run(results.instance);
+			});
 		});
-
 	}
 
 	on_update() {

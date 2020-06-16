@@ -13,4 +13,5 @@ Object.assign(Sphere.Game, {
 
 install('@/scripts',	files('src/*.js'));
 install('@/go-wasm',	files('go-wasm/*.wasm'));
+install('@/go-wasm',	files('go-wasm/*.js'));
 install('@/',			files('icon.png'));
