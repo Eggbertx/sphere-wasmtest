@@ -20,6 +20,8 @@ valid cmd values:
 		builds the Sphere project for testing WebAssembly processing with Sphere
 	clean
 		cleans the files compiled by Go and Emscripten, and the Sphere project files in ./dist
+	server
+		Runs a server for testing the WebAssembly stuff in a browser
 	help
 		prints this message"
 }
@@ -59,6 +61,8 @@ case "$CMD" in
 	rm -f $EMS_DIR/$EMS_PREFIX*
 	rm -f $GWASM_DIR/$GWASM_PREFIX*
 	;;
+"server")
+	go run ./server/goserver.go
 *)
 	usage
 	;;
