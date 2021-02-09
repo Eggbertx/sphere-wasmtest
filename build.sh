@@ -63,6 +63,7 @@ case "$CMD" in
 	;;
 "server")
 	go run ./server/goserver.go
+	;;
 *)
 	usage
 	;;
