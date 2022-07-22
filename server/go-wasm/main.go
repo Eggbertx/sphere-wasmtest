@@ -6,8 +6,13 @@ import (
 )
 
 func main() {
-	sphereNS := js.Global().Get("Sphere")
-	version := sphereNS.Get("Engine").String()
 	fmt.Println("Hello from Go/WebAssembly!")
-	fmt.Printf("According to WebAssembly, it looks like you're using %s\n", version)
+
+	sphereNS := js.Global().Get("Sphere")
+	if sphereNS.IsUndefined() {
+		// not running in Sphere
+		return
+	}
+	version := sphereNS.Get("Engine").String()
+	fmt.Printf("According to WebAssembly, it looks like you're using neoSphere version %s\n", version)
 }

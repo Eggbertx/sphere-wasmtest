@@ -14,11 +14,11 @@ Object.assign(Sphere.Game, {
 install('@/scripts', files('src/*.js'));
 
 // for .wasm files compiled with Go
-install('@/go-wasm', files('go-wasm/*.wasm'));
-install('@/go-wasm', files('go-wasm/*.js'));
+install('@/go-wasm', files('server/go-wasm/*.wasm'));
+install('@/go-wasm', files('server/go-wasm/*.js'));
 
 // for .wasm files compiled with Emscripten
-install('@/emscripten-wasm', files('emscripten-wasm/*.wasm'));
-install('@/emscripten-wasm', files('emscripten-wasm/*.js'));
+install('@/emscripten-wasm', files('server/emscripten-wasm/*.wasm'));
+install('@/emscripten-wasm', files('server/emscripten-wasm/*.js'));
 
 install('@/', files('icon.png'));

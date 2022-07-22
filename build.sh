@@ -29,6 +29,7 @@ valid cmd values:
 function build-go {
 	echo "building go stuff"
 	GOOS=js GOARCH=wasm go build -o ${GWASM_DIR}/${GWASM_PREFIX}.wasm ./$GWASM_DIR
+	cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" $GWASM_DIR/
 }
 
 function build-ems {
@@ -41,27 +42,27 @@ if [[ -n "$1" ]]; then
 fi
 
 case "$CMD" in
-"all")
+all)
 	build-ems
 	build-go
 	cell
 	;;
-"emscripten")
-	echo "building emscripten stuff"
+emscripten|c)
+	build-ems
 	;;
-"go")
+go)
 	build-go
 	;;
-"cell")
+cell)
 	cell
 	;;
-"clean")
+clean)
 	echo "cleaning stuff"
 	rm -rf dist
 	rm -f $EMS_DIR/$EMS_PREFIX*
 	rm -f $GWASM_DIR/$GWASM_PREFIX*
 	;;
-"server")
+server)
 	go run ./server/goserver.go
 	;;
 *)

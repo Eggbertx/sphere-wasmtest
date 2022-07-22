@@ -1,2 +1,4 @@
 /dist
 *.wasm
+wasm_exec.js
+emscripten-wasm.*
