@@ -4,7 +4,7 @@ Object.assign(Sphere.Game, {
 
 	name: "Sphere WebAssembly Test",
 	author: "Eggbertx",
-	summary: "Testing the WebAssembly API with miniSphere",
+	summary: "Testing the WebAssembly API with neoSphere",
 	resolution: '640x480',
 
 	main: '@/scripts/main.js',
